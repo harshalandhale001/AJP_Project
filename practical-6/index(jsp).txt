@@ -1,0 +1,86 @@
+
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Details Form</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #eaf2f8;
+            padding: 30px;
+        }
+
+        .container {
+            width: 400px;
+            margin: auto;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px gray;
+        }
+
+        h2 {
+            text-align: center;
+            color: #174a75;
+        }
+
+        label {
+            display: block;
+            margin-top: 12px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 9px;
+            margin-top: 5px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 20px;
+            background: #1769aa;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>Student Details Form</h2>
+
+    <form action="student.jsp" method="post">
+
+        <label>Roll Number:</label>
+        <input type="number" name="roll" required>
+
+        <label>Student Name:</label>
+        <input type="text" name="name" required>
+
+        <label>Course:</label>
+        <input type="text" name="course" required>
+
+        <label>Email:</label>
+        <input type="email" name="email" required>
+
+        <label>Marks:</label>
+        <input type="number" name="marks"
+               min="0" max="100" step="0.01" required>
+
+        <button type="submit">Submit Details</button>
+
+    </form>
+
+</div>
+
+</body>
+</html>

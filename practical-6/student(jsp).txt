@@ -1,0 +1,119 @@
+
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
+<%!
+    // Method to safely display user input in HTML
+    private String escapeHtml(String value) {
+        if (value == null) {
+            return "";
+        }
+
+        return value.replace("&", "&amp;")
+                    .replace("<", "&lt;")
+                    .replace(">", "&gt;")
+                    .replace("\"", "&quot;")
+                    .replace("'", "&#x27;");
+    }
+%>
+
+<%
+    // Using response implicit object
+    response.setHeader("Cache-Control", "no-cache");
+
+    // Using request implicit object
+    String roll = request.getParameter("roll");
+    String name = request.getParameter("name");
+    String course = request.getParameter("course");
+    String email = request.getParameter("email");
+    String marks = request.getParameter("marks");
+
+    // Using session implicit object
+    session.setAttribute("studentName", name);
+    session.setAttribute("studentRoll", roll);
+
+%>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Details</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #eaf2f8;
+            padding: 30px;
+        }
+
+        .container {
+            width: 450px;
+            margin: auto;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px gray;
+        }
+
+        h2 {
+            text-align: center;
+            color: green;
+        }
+
+        p {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>Student Details Submitted Successfully!</h2>
+
+    <h3>Student Information</h3>
+
+    <p><b>Roll Number:</b>
+        <%= escapeHtml(roll) %>
+    </p>
+
+    <p><b>Name:</b>
+        <%= escapeHtml(name) %>
+    </p>
+
+    <p><b>Course:</b>
+        <%= escapeHtml(course) %>
+    </p>
+
+    <p><b>Email:</b>
+        <%= escapeHtml(email) %>
+    </p>
+
+    <p><b>Marks:</b>
+        <%= escapeHtml(marks) %>
+    </p>
+
+    <hr>
+
+    <h3>Session Information</h3>
+
+    <p><b>Stored Student Name:</b>
+        <%= escapeHtml((String)session.getAttribute("studentName")) %>
+    </p>
+
+    <p><b>Stored Roll Number:</b>
+        <%= escapeHtml((String)session.getAttribute("studentRoll")) %>
+    </p>
+
+    <a href="index.jsp">Enter Another Student</a>
+
+</div>
+
+</body>
+</html>
