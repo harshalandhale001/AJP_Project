@@ -1,0 +1,80 @@
+
+package com.feedback;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+@WebServlet("/FeedbackServlet")
+public class FeedbackServlet extends HttpServlet {
+
+    @Override
+    protected void doPost(HttpServletRequest request,
+                          HttpServletResponse response)
+            throws ServletException, IOException {
+
+        // Set response type
+        response.setContentType("text/html;charset=UTF-8");
+
+        // Receive data from HTML form
+        String name = request.getParameter("name");
+        String email = request.getParameter("email");
+        String mobile = request.getParameter("mobile");
+        String course = request.getParameter("course");
+        String rating = request.getParameter("rating");
+        String comments = request.getParameter("comments");
+
+        // Generate response
+        PrintWriter out = response.getWriter();
+
+        out.println("<!DOCTYPE html>");
+        out.println("<html>");
+        out.println("<head>");
+        out.println("<title>Feedback Result</title>");
+        out.println("<style>");
+        out.println("body {font-family:Arial;background:#eaf2f8;padding:30px;}");
+        out.println(".box {background:white;padding:25px;margin:auto;width:450px;border-radius:10px;}");
+        out.println("h1 {color:green;text-align:center;}");
+        out.println("p {padding:8px;border-bottom:1px solid #ddd;}");
+        out.println("</style>");
+        out.println("</head>");
+
+        out.println("<body>");
+        out.println("<div class='box'>");
+
+        out.println("<h1>Feedback Submitted Successfully!</h1>");
+
+        out.println("<h3>Student Feedback Details</h3>");
+
+        out.println("<p><b>Name:</b> " + escapeHtml(name) + "</p>");
+        out.println("<p><b>Email:</b> " + escapeHtml(email) + "</p>");
+        out.println("<p><b>Mobile:</b> " + escapeHtml(mobile) + "</p>");
+        out.println("<p><b>Course:</b> " + escapeHtml(course) + "</p>");
+        out.println("<p><b>Rating:</b> " + escapeHtml(rating) + "</p>");
+        out.println("<p><b>Comments:</b> " + escapeHtml(comments) + "</p>");
+
+        out.println("<br><a href='index.html'>Submit Another Feedback</a>");
+
+        out.println("</div>");
+        out.println("</body>");
+        out.println("</html>");
+    }
+
+    // Escape user input before displaying it as HTML
+    private String escapeHtml(String value) {
+        if (value == null) {
+            return "";
+        }
+
+        return value.replace("&", "&amp;")
+                    .replace("<", "&lt;")
+                    .replace(">", "&gt;")
+                    .replace("\"", "&quot;")
+                    .replace("'", "&#x27;");
+    }
+}
