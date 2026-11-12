@@ -1,0 +1,237 @@
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Scanner;
+
+public class StudentCRUDApp {
+
+    // Database connection details
+    static final String URL =
+            "jdbc:mysql://localhost:3306/studentdb";
+
+    static final String USER = "root";
+    static final String PASSWORD = "root";
+
+    static Scanner sc = new Scanner(System.in);
+
+    // Establish database connection
+    public static Connection getConnection()
+            throws SQLException {
+
+        return DriverManager.getConnection(
+                URL, USER, PASSWORD);
+    }
+
+    // CREATE: Insert student record
+    public static void addStudent() {
+
+        String sql = "INSERT INTO Student "
+                + "(RollNo, Name, Course, Marks) "
+                + "VALUES (?, ?, ?, ?)";
+
+        try (Connection con = getConnection();
+             PreparedStatement ps =
+                     con.prepareStatement(sql)) {
+
+            System.out.print("Enter Roll Number: ");
+            int roll = sc.nextInt();
+            sc.nextLine();
+
+            System.out.print("Enter Name: ");
+            String name = sc.nextLine();
+
+            System.out.print("Enter Course: ");
+            String course = sc.nextLine();
+
+            System.out.print("Enter Marks: ");
+            double marks = sc.nextDouble();
+
+            ps.setInt(1, roll);
+            ps.setString(2, name);
+            ps.setString(3, course);
+            ps.setDouble(4, marks);
+
+            int result = ps.executeUpdate();
+
+            if (result > 0) {
+                System.out.println(
+                        "Student added successfully!");
+            }
+
+        } catch (SQLException e) {
+            System.out.println(
+                    "Error adding student: " + e.getMessage());
+        }
+    }
+
+    // READ: Display all student records
+    public static void displayStudents() {
+
+        String sql = "SELECT * FROM Student";
+
+        try (Connection con = getConnection();
+             PreparedStatement ps =
+                     con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            System.out.println("\n--- Student Records ---");
+
+            boolean found = false;
+
+            while (rs.next()) {
+
+                found = true;
+
+                System.out.println(
+                        "Roll Number: " + rs.getInt("RollNo"));
+
+                System.out.println(
+                        "Name: " + rs.getString("Name"));
+
+                System.out.println(
+                        "Course: " + rs.getString("Course"));
+
+                System.out.println(
+                        "Marks: " + rs.getDouble("Marks"));
+
+                System.out.println("--------------------");
+            }
+
+            if (!found) {
+                System.out.println(
+                        "No student records found!");
+            }
+
+        } catch (SQLException e) {
+            System.out.println(
+                    "Error displaying records: " + e.getMessage());
+        }
+    }
+
+    // UPDATE: Modify student details
+    public static void updateStudent() {
+
+        String sql = "UPDATE Student "
+                + "SET Name = ?, Course = ?, Marks = ? "
+                + "WHERE RollNo = ?";
+
+        try (Connection con = getConnection();
+             PreparedStatement ps =
+                     con.prepareStatement(sql)) {
+
+            System.out.print("Enter Roll Number to update: ");
+            int roll = sc.nextInt();
+            sc.nextLine();
+
+            System.out.print("Enter New Name: ");
+            String name = sc.nextLine();
+
+            System.out.print("Enter New Course: ");
+            String course = sc.nextLine();
+
+            System.out.print("Enter New Marks: ");
+            double marks = sc.nextDouble();
+
+            ps.setString(1, name);
+            ps.setString(2, course);
+            ps.setDouble(3, marks);
+            ps.setInt(4, roll);
+
+            int result = ps.executeUpdate();
+
+            if (result > 0) {
+                System.out.println(
+                        "Student updated successfully!");
+            } else {
+                System.out.println(
+                        "Student Roll Number not found!");
+            }
+
+        } catch (SQLException e) {
+            System.out.println(
+                    "Error updating student: " + e.getMessage());
+        }
+    }
+
+    // DELETE: Remove student record
+    public static void deleteStudent() {
+
+        String sql = "DELETE FROM Student WHERE RollNo = ?";
+
+        try (Connection con = getConnection();
+             PreparedStatement ps =
+                     con.prepareStatement(sql)) {
+
+            System.out.print("Enter Roll Number to delete: ");
+            int roll = sc.nextInt();
+
+            ps.setInt(1, roll);
+
+            int result = ps.executeUpdate();
+
+            if (result > 0) {
+                System.out.println(
+                        "Student deleted successfully!");
+            } else {
+                System.out.println(
+                        "Student Roll Number not found!");
+            }
+
+        } catch (SQLException e) {
+            System.out.println(
+                    "Error deleting student: " + e.getMessage());
+        }
+    }
+
+    // MAIN METHOD
+    public static void main(String[] args) {
+
+        int choice;
+
+        do {
+            System.out.println("\n===== STUDENT DATABASE MANAGEMENT =====");
+
+            System.out.println("1. Add Student");
+            System.out.println("2. Display Students");
+            System.out.println("3. Update Student");
+            System.out.println("4. Delete Student");
+            System.out.println("5. Exit");
+
+            System.out.print("Enter your choice: ");
+
+            choice = sc.nextInt();
+
+            switch (choice) {
+
+                case 1:
+                    addStudent();
+                    break;
+
+                case 2:
+                    displayStudents();
+                    break;
+
+                case 3:
+                    updateStudent();
+                    break;
+
+                case 4:
+                    deleteStudent();
+                    break;
+
+                case 5:
+                    System.out.println("Exiting program...");
+                    break;
+
+                default:
+                    System.out.println("Invalid choice!");
+            }
+
+        } while (choice != 5);
+
+        sc.close();
+    }
+}

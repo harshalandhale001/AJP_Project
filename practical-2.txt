@@ -1,0 +1,124 @@
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Scanner;
+
+public class Practical02 {
+
+    // Employee class
+    static class Employee {
+        int id;
+        String name;
+        String department;
+        double salary;
+
+        Employee(int id, String name, String department, double salary) {
+            this.id = id;
+            this.name = name;
+            this.department = department;
+            this.salary = salary;
+        }
+
+        void display() {
+            System.out.println(
+                "ID: " + id +
+                ", Name: " + name +
+                ", Department: " + department +
+                ", Salary: " + salary
+            );
+        }
+    }
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        ArrayList<Employee> employees = new ArrayList<>();
+
+        // Adding sample employees
+        employees.add(new Employee(101, "Rahul", "IT", 60000));
+        employees.add(new Employee(102, "Priya", "HR", 40000));
+        employees.add(new Employee(103, "Amit", "IT", 75000));
+        employees.add(new Employee(104, "Sneha", "Finance", 50000));
+
+        int choice;
+
+        do {
+            System.out.println("\n===== EMPLOYEE MANAGEMENT =====");
+            System.out.println("1. Display All Employees");
+            System.out.println("2. Employees with Salary Above 50000");
+            System.out.println("3. Sort Employees by Name");
+            System.out.println("4. Sort Employees by Salary");
+            System.out.println("5. Display IT Department Employees");
+            System.out.println("6. Display High Salary Employees");
+            System.out.println("7. Exit");
+
+            System.out.print("Enter your choice: ");
+            choice = sc.nextInt();
+
+            switch (choice) {
+
+                case 1:
+                    System.out.println("\nAll Employees:");
+
+                    employees.forEach(e -> e.display());
+                    break;
+
+                case 2:
+                    System.out.println("\nEmployees with Salary Above 50000:");
+
+                    employees.stream()
+                        .filter(e -> e.salary > 50000)
+                        .forEach(e -> e.display());
+                    break;
+
+                case 3:
+                    System.out.println("\nEmployees Sorted by Name:");
+
+                    employees.stream()
+                        .sorted(Comparator.comparing(e -> e.name))
+                        .forEach(e -> e.display());
+                    break;
+
+                case 4:
+                    System.out.println("\nEmployees Sorted by Salary:");
+
+                    employees.stream()
+                        .sorted(Comparator.comparingDouble(
+                            (Employee e) -> e.salary
+                        ).reversed())
+                        .forEach(e -> e.display());
+                    break;
+
+                case 5:
+                    System.out.println("\nIT Department Employees:");
+
+                    employees.stream()
+                        .filter(e -> e.department.equalsIgnoreCase("IT"))
+                        .forEach(e -> e.display());
+                    break;
+
+                case 6:
+                    System.out.println("\nHigh Salary Employees:");
+
+                    List<Employee> highSalary = employees.stream()
+                        .filter(e -> e.salary >= 60000)
+                        .toList();
+
+                    highSalary.forEach(e -> e.display());
+                    break;
+
+                case 7:
+                    System.out.println("Exiting Program...");
+                    break;
+
+                default:
+                    System.out.println("Invalid Choice!");
+            }
+
+        } while (choice != 7);
+
+        sc.close();
+    }
+}
